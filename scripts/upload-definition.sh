@@ -21,6 +21,11 @@ else
   export CURL_OPTS="--fail --silent"
 fi
 
+if [ "_${IMPORTER_CREDS_MOUNT}" != "_" ]; then
+  IMPORTER_USERNAME=$(cat ${IMPORTER_CREDS_MOUNT}/ccd-as-a-pr-importer-username)
+  IMPORTER_PASSWORD=$(cat ${IMPORTER_CREDS_MOUNT}/ccd-as-a-pr-importer-password)
+fi
+
 [ "_${CREATE_IMPORTER_USER}" = "_true" ] && /scripts/create-importer-user.sh "${IMPORTER_USERNAME}" "${IMPORTER_PASSWORD}" "${IDAM_URI}"
 
 userToken=$(sh ./scripts/idam-authenticate.sh ${IMPORTER_USERNAME} ${IMPORTER_PASSWORD} ${IDAM_URI} ${REDIRECT_URI} ${CLIENT_ID} ${CLIENT_SECRET})
