@@ -15,7 +15,7 @@ role=$1
 classification=$2
 userToken=$3
 serviceToken=$4
-definitionStoreApi=$5
+ccdStoreApi=$5
 
 if [ "$#" -ne 4 ]
   then
@@ -32,7 +32,7 @@ case $classification in
 esac
 
 curl ${CURL_OPTS} -XPUT \
-  ${definitionStoreApi}/api/user-role \
+  ${ccdStoreApi}/api/user-role \
   -H "Authorization: Bearer ${userToken}" \
   -H "ServiceAuthorization: Bearer ${serviceToken}" \
   -H "Content-Type: application/json" \
