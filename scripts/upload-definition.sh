@@ -21,7 +21,7 @@ else
   export CURL_OPTS="--fail --silent"
 fi
 
-[ "_${CREATE_IMPORTER_USER}" = "_true" ] && /scripts/create-importer-user.sh ${IMPORTER_USERNAME} ${IMPORTER_PASSWORD}
+[ "_${CREATE_IMPORTER_USER}" = "_true" ] && /scripts/create-importer-user.sh "${IMPORTER_USERNAME}" "${IMPORTER_PASSWORD}" "${IDAM_URI}"
 
 userToken=$(sh ./scripts/idam-authenticate.sh ${IMPORTER_USERNAME} ${IMPORTER_PASSWORD} ${IDAM_URI} ${REDIRECT_URI} ${CLIENT_ID} ${CLIENT_SECRET})
 

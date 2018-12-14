@@ -2,14 +2,15 @@
 
 set -e
 
-USER_EMAIL=$1
-PASSWORD=$2
+USER_EMAIL="$1"
+PASSWORD="$2"
+IDAM_URI="$3"
 
 FORENAME=CCD
 SURNAME=Importer
 USER_GROUP=ccd-import
 
-curl -XPOST -H 'Content-Type: application/json' http://idam-api:8080/testing-support/accounts -d '{
+curl -XPOST -H 'Content-Type: application/json' ${IDAM_URI}/testing-support/accounts -d '{
     "email": "'${USER_EMAIL}'",
     "forename": "'${FORENAME}'",
     "surname": "'${SURNAME}'",
