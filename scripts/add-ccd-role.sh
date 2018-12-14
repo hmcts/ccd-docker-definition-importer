@@ -1,7 +1,7 @@
 #!/bin/sh
 ## Add user role in ccd
 ##
-## Usage: ./add-ccd-role.sh role classification userToken
+## Usage: ./add-ccd-role.sh role classification user_token service_token definition_store_api
 ##
 ## Options:
 ##    - role: Name of the role. Must be an existing IDAM role.
@@ -14,11 +14,12 @@
 role=$1
 classification=$2
 userToken=$3
-apiGateway=$4
+serviceToken=$4
+definitionStoreApi=$5
 
 if [ "$#" -ne 4 ]
   then
-    echo "Usage: ./add-ccd-role.sh role classification user_token api_gateway_base_url"
+    echo "Usage: ./add-ccd-role.sh role classification user_token definition_store_api"
     exit 1
 fi
 
@@ -31,7 +32,8 @@ case $classification in
 esac
 
 curl ${CURL_OPTS} -XPUT \
-  ${apiGateway}/definition_import/api/user-role \
+  ${definitionStoreApi}/api/user-role \
   -H "Authorization: Bearer ${userToken}" \
+  -H "ServiceAuthorization: Bearer ${serviceToken}" \
   -H "Content-Type: application/json" \
   -d '{"role":"'${role}'","security_classification":"'${classification}'"}'

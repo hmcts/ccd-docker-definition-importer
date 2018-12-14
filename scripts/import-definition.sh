@@ -1,7 +1,7 @@
 #!/bin/sh
 ## Imports given definition into CCD definition store.
 ##
-## Usage: ./import-definition.sh path_to_definition userToken
+## Usage: ./import-definition.sh path_to_definition user_token service_token ccd_store_api
 ##
 ## Prerequisites:
 ##  - Microservice `bulk_scan_orchestrator` must be authorised to call service `ccd-definition-store-api`
@@ -17,11 +17,8 @@ elif [ ! -f "$1" ]
 fi
 
 userToken=$2
-authProviderApi=$3
-microservice=$4
-ccdStoreApi=$5
-
-serviceToken=$(curl --silent -X POST ${authProviderApi}/testing-support/lease -d \"{"microservice":"${microservice}"}\" -H 'content-type: application/json')
+serviceToken=$3
+ccdStoreApi=$4
 
 curl ${CURL_OPTS}  \
   ${ccdStoreApi}/import \
