@@ -11,7 +11,7 @@
 ##
 ## Add support for an IDAM role in CCD.
 
-roles=$1
+roles="$1"
 classification=$2
 userToken=$3
 serviceToken=$4
@@ -32,7 +32,7 @@ case $classification in
 esac
 
 IFS=","
-for role in roles
+for role in $roles
 do
   curl ${CURL_OPTS} -XPUT \
     ${ccdStoreApi}/api/user-role \
