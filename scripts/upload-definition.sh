@@ -33,13 +33,13 @@ userToken=$(sh ./scripts/idam-authenticate.sh ${IMPORTER_USERNAME} ${IMPORTER_PA
 serviceToken=$(curl --silent -X POST ${AUTH_PROVIDER_BASE_URL}/testing-support/lease -d \"{"microservice":"${MICROSERVICE}"}\" -H 'content-type: application/json')
 
 # add ccd role
-/scripts/add-ccd-role.sh "${CCD_ROLE}" "PUBLIC" "${userToken}" "${serviceToken}" "${CCD_STORE_BASE_URL}"
+/scripts/add-ccd-role.sh "${USER_ROLES}" "PUBLIC" "${userToken}" "${serviceToken}" "${CCD_STORE_BASE_URL}"
 
 for definition in /definitions/[^~]*.xlsx # do not process excel temp files that start with ~
 do
   echo "======== PROCESSING FILE $definition ========="
 
-  /scripts/template_ccd_definition.py "$definition" /definition.xlsx "${BULK_SCAN_ORCHESTRATOR_BASE_URL}"
+  /scripts/template_ccd_definition.py "$definition" /definition.xlsx "${MICROSERVICE_BASE_URL}"
 
   # upload definition files
   /scripts/import-definition.sh /definition.xlsx "${userToken}" "${serviceToken}" "${CCD_STORE_BASE_URL}"
