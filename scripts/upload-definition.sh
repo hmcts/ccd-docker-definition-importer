@@ -39,7 +39,7 @@ for definition in /definitions/[^~]*.xlsx # do not process excel temp files that
 do
   echo "======== PROCESSING FILE $definition ========="
 
-  /scripts/template_ccd_definition.py "$definition" /definition.xlsx "${BULK_SCAN_ORCHESTRATOR_BASE_URL}"
+  /scripts/template_ccd_definition.py "$definition" /definition.xlsx "${MICROSERVICE_BASE_URL}"
 
   # upload definition files
   /scripts/import-definition.sh /definition.xlsx "${userToken}" "${serviceToken}" "${CCD_STORE_BASE_URL}"

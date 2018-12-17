@@ -10,7 +10,7 @@ template_file_location = sys.argv[1]
 output_file_location = sys.argv[2]
 service_base_url = sys.argv[3]
 
-service_base_url_placeholder = '${BULK_SCAN_ORCHESTRATOR_BASE_URL}'
+service_base_url_placeholder = '${MICROSERVICE_BASE_URL}'
 
 def template_sheet(ws, callback_columns):
   print('Updating CCD sheet ' + ws.title)
