@@ -4,11 +4,11 @@
 ## Usage: ./import-definition.sh path_to_definition user_token service_token ccd_store_api
 ##
 ## Prerequisites:
-##  - Microservice `bulk_scan_orchestrator` must be authorised to call service `ccd-definition-store-api`
+##  - Microservice  must be authorised to call service `ccd-definition-store-api`
 
 if [ -z "$1" ]
   then
-    echo "Usage: ./import-definition.sh path_to_definition  user_token  auth_provider_api_base_url  microservice  ccd_store_api_base_url"
+    echo "Usage: ./import-definition.sh  path_to_definition  user_token  service_token  ccd_store_api_base_url"
     exit 1
 elif [ ! -f "$1" ]
   then
