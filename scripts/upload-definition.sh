@@ -10,8 +10,9 @@ mkdir /definitions && cd /definitions
 defs=$(echo "$CCD_DEF_URLS" | tr "," "\n")
 for def in $defs
 do
-    wget -nd "$def"
-    [ $? -ne 0 ] && "Failed to download \"${def}\". Script terminated." && exit 21
+    echo "Getting \"$def\" ..."
+    wget -nd "$def" || "Failed to download \"${def}\". Script terminated." && exit 21
+    echo "done"
 done
 [ -z "$(ls -A /definitions)" ] && echo "No definitions found to download. Script terminated." && exit 22
 
