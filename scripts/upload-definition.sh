@@ -32,9 +32,11 @@ fi
 
 echo "Getting user_token from idam"
 userToken=$(/scripts/idam-authenticate.sh ${IMPORTER_USERNAME} ${IMPORTER_PASSWORD} ${IDAM_URI} ${REDIRECT_URI} ${CLIENT_ID} ${CLIENT_SECRET})
+echo "$userToken"
 
 echo "Getting service_token from s2s"
-serviceToken=$(curl --silent -X POST ${AUTH_PROVIDER_BASE_URL}/testing-support/lease -d "{\"microservice\":\"${MICROSERVICE}\"}" -H 'content-type: application/json')
+serviceToken=$(curl --fail --silent -X POST ${AUTH_PROVIDER_BASE_URL}/testing-support/lease -d "{\"microservice\":\"${MICROSERVICE}\"}" -H 'content-type: application/json')
+echo "$serviceToken"
 
 # add ccd role
 echo "Adding ccd roles"
