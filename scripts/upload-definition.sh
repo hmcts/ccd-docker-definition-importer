@@ -17,9 +17,9 @@ done
 [ -z "$(ls -A /definitions)" ] && echo "No definitions found to download. Script terminated." && exit 22
 
 if [ ${VERBOSE} = "true" ]; then
-  export CURL_OPTS="-v"
+  export CURL_OPTS="--fail --verbose"
 else
-  export CURL_OPTS="--fail --silent"
+  export CURL_OPTS="--fail --silent --show-error"
 fi
 
 if [ "_${IMPORTER_CREDS_MOUNT}" != "_" ]; then
