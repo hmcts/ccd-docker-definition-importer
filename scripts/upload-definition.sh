@@ -11,7 +11,7 @@ defs=$(echo "$CCD_DEF_URLS" | tr "," "\n")
 for def in $defs
 do
     echo "Getting \"$def\" ..."
-    wget -nd "$def" || ("Failed to download \"${def}\". Script terminated." && exit 21)
+    wget -nd "$def" || (echo "Failed to download \"${def}\". Script terminated." && exit 21)
     echo "done"
 done
 [ -z "$(ls -A /definitions)" ] && echo "No definitions found to download. Script terminated." && exit 22
@@ -47,7 +47,7 @@ do
 
   /scripts/template_ccd_definition.py "$definition" /definition.xlsx "${MICROSERVICE_BASE_URL}"
 
-  # upload definition files
+  echo "Uploading definition file"
   /scripts/import-definition.sh /definition.xlsx "${userToken}" "${serviceToken}" "${CCD_STORE_BASE_URL}"
 
   echo "======== FINISHED PROCESSING $definition ========="
