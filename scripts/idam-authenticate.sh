@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 IMPORTER_USERNAME=$1
 IMPORTER_PASSWORD=$2

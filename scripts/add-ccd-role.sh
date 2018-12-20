@@ -17,9 +17,9 @@ userToken=$3
 serviceToken=$4
 ccdStoreApi=$5
 
-if [ "$#" -ne 4 ]
+if [ "$#" -ne 5 ]
   then
-    echo "Usage: ./add-ccd-role.sh roles classification user_token definition_store_api"
+    echo "Usage: ./add-ccd-role.sh roles classification user_token service_token definition_store_api"
     exit 1
 fi
 
@@ -31,13 +31,14 @@ case $classification in
     exit 1 ;;
 esac
 
-IFS=","
-for role in $roles
+for role in $(echo $roles | tr ',' '\n')
 do
-  curl ${CURL_OPTS} -XPUT \
-    ${ccdStoreApi}/api/user-role \
+  echo "Adding ccd role \"$role\" ..."
+  curl ${CURL_OPTS} -X PUT \
     -H "Authorization: Bearer ${userToken}" \
     -H "ServiceAuthorization: Bearer ${serviceToken}" \
     -H "Content-Type: application/json" \
-    -d '{"role":"'${role}'","security_classification":"'${classification}'"}'
+    -d "{\"role\":\"${role}\",\"security_classification\":\"${classification}\"}" \
+    ${ccdStoreApi}/api/user-role
+  echo "done"
 done
