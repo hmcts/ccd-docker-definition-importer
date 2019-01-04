@@ -1,5 +1,4 @@
 #!/bin/sh
-
 set -e
 
 template_file_location=$1
@@ -8,7 +7,7 @@ service_base_url=$3
 
 #service_base_url_placeholder='${MICROSERVICE_BASE_URL}'
 
-tmp_dir=/tmp_def
+tmp_dir="/tmp_def"
 rm -rf $tmp_dir
 mkdir $tmp_dir
 cd $tmp_dir
