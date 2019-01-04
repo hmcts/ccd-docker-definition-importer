@@ -14,5 +14,8 @@ mkdir $tmp_dir
 cd $tmp_dir
 
 unzip $template_file_location
+
 find . -type f -print0 | xargs -0 sed -i 's!\${MICROSERVICE_BASE_URL}!'"$service_base_url"'!g'
+
+rm -f $output_file_location
 zip -r $output_file_location .
