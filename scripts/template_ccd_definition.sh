@@ -11,8 +11,6 @@ if [ "$#" -ne 3 ]
     exit 1
 fi
 
-#service_base_url_placeholder='${MICROSERVICE_BASE_URL}'
-
 tmp_dir="/tmp_def"
 rm -rf $tmp_dir
 mkdir $tmp_dir
@@ -21,7 +19,7 @@ cd $tmp_dir
 unzip $template_file_location
 
 echo "Replacing microservice url..."
-find . -type f -print0 | xargs -0 sed -i 's!\${MICROSERVICE_BASE_URL}!'"$service_base_url"'!g'
+find . -type f \( -name '*.xml' -o -name '*.rels' \) -print0 | xargs -0 sed -i 's!\${MICROSERVICE_BASE_URL}!'"$service_base_url"'!g'
 echo "done"
 
 rm -f $output_file_location
