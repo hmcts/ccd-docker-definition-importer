@@ -45,6 +45,7 @@ for definition in /definitions/[^~]*.xlsx # do not process excel temp files that
 do
   echo "======== PROCESSING FILE $definition ========="
 
+  rm -f /definition.xlsx
   /scripts/template_ccd_definition.sh "$definition" /definition.xlsx "${MICROSERVICE_BASE_URL}"
 
   echo "Uploading definition file"
