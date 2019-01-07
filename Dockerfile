@@ -9,6 +9,5 @@ COPY scripts /scripts
 RUN ["chmod", "+x", "/wait"]
 
 RUN chmod +x /scripts/*.sh
-RUN pip3 install -r /scripts/requirements.txt
 
 CMD "/wait" && "/scripts/upload-definition.sh"
