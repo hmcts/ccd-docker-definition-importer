@@ -20,7 +20,9 @@ cd $tmp_dir
 
 unzip $template_file_location
 
+echo "Replacing microservice url..."
 find . -type f -print0 | xargs -0 sed -i 's!\${MICROSERVICE_BASE_URL}!'"$service_base_url"'!g'
+echo "done"
 
 rm -f $output_file_location
 zip -r $output_file_location .
