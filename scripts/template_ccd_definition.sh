@@ -5,6 +5,12 @@ template_file_location=$1
 output_file_location=$2
 service_base_url=$3
 
+if [ "$#" -ne 3 ]
+  then
+    echo "Usage: template_ccd_definition.sh template_file_location output_file_location service_base_url"
+    exit 1
+fi
+
 #service_base_url_placeholder='${MICROSERVICE_BASE_URL}'
 
 tmp_dir="/tmp_def"
