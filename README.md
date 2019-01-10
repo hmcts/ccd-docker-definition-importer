@@ -9,7 +9,8 @@ The scripts that load the definitions expect the following environment to be ava
 
 | Parameter                | Description                                                                                                                 | Default                                                                                                                         |
 |--------------------------|-----------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
-| `CCD_DEF_URLS`           | List of URLs to retrieve the definition xls files. The script terminates if this is empty.                          | ``                                                                                                                              |
+| `CCD_DEF_URLS`           | List of URLs to retrieve the definition xls files. The script terminates if this is empty.                          | ``
+                                                   |
 | `WAIT_HOSTS`             | Hosts to wait for before loading the definitions                                                                            | `ccd-user-profile-api:4453, ccd-definition-store-api:4451, service-auth-provider-api:8080, ccd-api-gateway:3453, idam-api:8080` |
 | `VERBOSE`                | Output extra info                                                                                                           | `false`                                                                                                                         |
 | `CREATE_IMPORTER_USER`   | Create importer user. Used only with local version of Idam.                                                                 | `false`                                                                                                                         |
@@ -24,3 +25,9 @@ The scripts that load the definitions expect the following environment to be ava
 | `AUTH_PROVIDER_BASE_URL` | Base URL for the service auth provider to get a token for the definitions import                                            | `http://service-auth-provider-api:8080`                                                                                         |
 | `MICROSERVICE`           | Microservice the definitions are for.                                                                                       | `bulk_scan_orchestrator`                                                                                                        |
 | `CCD_STORE_BASE_URL`     | Base URL for the CCD store the definitions are loaded in.                                                                   | `http://ccd-definition-store-api:4451`                                                                                          |
+
+**Note**: Use `raw` for github CCD definition files URLs (instead of `blob`). For instance:
+```
+  - https://github.com/hmcts/chart-ccd/raw/master/data/CCD_Definition_Test_Exception_Record.template.xlsx
+  - https://github.com/hmcts/chart-ccd/raw/master/data/CCD_Definition_Test.template.xlsx
+```
