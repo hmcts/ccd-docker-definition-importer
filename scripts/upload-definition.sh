@@ -11,7 +11,12 @@ defs=$(echo "$CCD_DEF_URLS" | tr "," "\n")
 for def in $defs
 do
     echo "Getting \"$def\" ..."
-    wget -nd "$def" || (echo "Failed to download \"${def}\". Script terminated." && exit 21)
+    if [ "_${GITHUB_CREDS_MOUNT}" != "_" ] && [ -f ${GITHUB_CREDS_MOUNT}/hmcts-github-apikey ]; then
+      echo "Getting github credentials from vault"
+      ACCESS_TOKEN=$(cat ${GITHUB_CREDS_MOUNT}/hmcts-github-apikey)
+      headers="Authorization: token ${ACCESS_TOKEN}"
+    fi
+    wget -nd --header="$headers" "$def" || (echo "Failed to download \"${def}\". Script terminated." && exit 21)
     echo "done"
 done
 [ -z "$(ls -A /definitions)" ] && echo "No definitions found to download. Script terminated." && exit 22
