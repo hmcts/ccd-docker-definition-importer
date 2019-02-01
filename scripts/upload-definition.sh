@@ -3,22 +3,27 @@ set -e
 
 chmod +x /scripts/*.sh
 
-[ "_${CCD_DEF_URLS}" = "_" ] && echo "No definitions to load from CCD_DEF_URLS. Script terminated." && exit 0
+[ "_${CCD_DEF_URLS}${CCD_DEF_FILENAME}" = "_" ] && echo "No definitions to load from CCD_DEF_URLS or CCD_DEF_FILENAME. Script terminated." && exit 0
 
 mkdir /definitions && cd /definitions
 
-defs=$(echo "$CCD_DEF_URLS" | tr "," "\n")
-for def in $defs
-do
-    echo "Getting \"$def\" ..."
-    if [ "_${GITHUB_CREDS_MOUNT}" != "_" ] && [ -f ${GITHUB_CREDS_MOUNT}/hmcts-github-apikey ]; then
-      echo "Getting github credentials from vault"
-      ACCESS_TOKEN=$(cat ${GITHUB_CREDS_MOUNT}/hmcts-github-apikey)
-      headers="Authorization: token ${ACCESS_TOKEN}"
-    fi
-    wget -nd --header="$headers" "$def" || (echo "Failed to download \"${def}\". Script terminated." && exit 21)
-    echo "done"
-done
+if [ "_${CCD_DEF_URLS}" != "_" ]; then
+  defs=$(echo "$CCD_DEF_URLS" | tr "," "\n")
+  for def in $defs
+  do
+      echo "Getting \"$def\" ..."
+      if [ "_${GITHUB_CREDS_MOUNT}" != "_" ] && [ -f ${GITHUB_CREDS_MOUNT}/hmcts-github-apikey ]; then
+        echo "Getting github credentials from vault"
+        ACCESS_TOKEN=$(cat ${GITHUB_CREDS_MOUNT}/hmcts-github-apikey)
+        headers="Authorization: token ${ACCESS_TOKEN}"
+      fi
+      wget -nd --header="$headers" "$def" || (echo "Failed to download \"${def}\". Script terminated." && exit 21)
+      echo "done"
+  done
+elif [ "_${CCD_DEF_FILENAME}" != "_" ]; then
+  mv /${CCD_DEF_FILENAME} /definitions/${CCD_DEF_FILENAME}
+fi
+
 [ -z "$(ls -A /definitions)" ] && echo "No definitions found to download. Script terminated." && exit 22
 
 if [ ${VERBOSE} = "true" ]; then
