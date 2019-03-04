@@ -21,7 +21,7 @@ if [ "_${CCD_DEF_URLS}" != "_" ]; then
       echo "done"
   done
 elif [ "_${CCD_DEF_FILENAME}" != "_" ]; then
-  mv /${CCD_DEF_FILENAME} /definitions/${CCD_DEF_FILENAME}
+  cp /${CCD_DEF_FILENAME} /definitions/${CCD_DEF_FILENAME}
 fi
 
 [ -z "$(ls -A /definitions)" ] && echo "No definitions found to download. Script terminated." && exit 22
