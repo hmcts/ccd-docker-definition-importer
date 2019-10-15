@@ -2,6 +2,14 @@
 
 Docker image to load definitions into CCD. Definitions are excel files which are retrieved from urls passed to the image comma-separated in an environment variables.
 
+## Building
+
+Any commit or merge into master will automatically trigger an Azure ACR task. This task has been manually
+created using `./bin/deploy-acr-task.sh`. The task is defined in `acr-build-task.yaml`. 
+
+Note: the deploy script relys on a GitHub token (https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line) defined in `infra-vault-prod`, secret `hmcts-github-apikey`. The token is for setting up a webhook so Azure will be notified when a merge or commit happens. Make sure you are a repo admin and select token scope of: `admin:repo_hook  Full control of repository hooks`
+
+More info on ACR tasks can be read here: https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tasks-overview
 
 ## Configuration
 
