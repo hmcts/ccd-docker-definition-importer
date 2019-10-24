@@ -82,7 +82,7 @@ spec:
                 key: {{ .Values.importerUsername.secretKeyRefKey | quote }}
             {{- else }}
           - name: IMPORTER_USERNAME
-            value: {{.Values.importerUsername.value | quote }}
+            value: {{ .Values.importerUsername.value | quote }}
             {{- end }} 
             {{- if .Values.importerFromSecret }}
           - name: IMPORTER_PASSWORD
@@ -92,7 +92,7 @@ spec:
                 key: {{ .Values.importerPassword.secretKeyRefKey | quote }}
             {{- else }}
           - name: IMPORTER_PASSWORD
-            value: {{.Values.importerPassword.value | quote }}
+            value: {{ .Values.importerPassword.value | quote }}
             {{- end }} 
           {{- end }}
           - name: IDAM_URI
