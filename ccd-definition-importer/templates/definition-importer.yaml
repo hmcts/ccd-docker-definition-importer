@@ -1,0 +1,133 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "hmcts.ccddi.releaseName" . }}
+  labels:
+    {{- ( include "ccddi.labels" . ) | indent 4 }}
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: before-hook-creation  # Move to hook-succeeded after first charts are done 
+spec:
+  template:
+    metadata:
+      name: {{ template "hmcts.ccddi.releaseName" . }}
+      labels:
+        {{- ( include "ccddi.labels" . ) | indent 4 }}
+    spec:
+      {{- if .Values.kvSecretRef }}
+      volumes:
+        - name: kvcreds
+          flexVolume:
+            driver: "azure/kv"
+            secretRef:
+              name: {{ default "kvcreds" .Values.kvSecretRef }} 
+            options:
+              usepodidentity: "false"
+              subscriptionid: {{ .Values.global.subscriptionId }}
+              tenantid: {{ .Values.global.tenantId }}
+              keyvaultname: {{ include "importer.definition.vault" . | quote }}
+              resourcegroup: {{ include "importer.definition.resourcegroup" . | quote }}
+              keyvaultobjectnames: "ccd-as-a-pr-importer-username;ccd-as-a-pr-importer-password"
+              keyvaultobjecttypes: "secret;secret" # OPTIONS: secret, key, cert
+        - name: gitcreds
+          flexVolume:
+            driver: "azure/kv"
+            secretRef:
+              name: {{ default "kvcreds" .Values.gitSecretRef }} 
+            options:
+              usepodidentity: "false"
+              subscriptionid: {{ .Values.global.subscriptionId }}
+              tenantid: {{ .Values.global.tenantId }}
+              keyvaultname: {{ include "importer.definition.vaultGit" . | quote }}
+              resourcegroup: "cnp-core-infra"
+              keyvaultobjectnames: "hmcts-github-apikey"
+              keyvaultobjecttypes: "secret" # OPTIONS: secret, key, cert
+      {{- end }}
+      containers:
+        - name: {{ template "hmcts.ccddi.releaseName" . }}
+          image: {{ .Values.image }} 
+          imagePullPolicy: IfNotPresent
+          {{- if .Values.kvSecretRef }}
+          volumeMounts:
+          - name: kvcreds
+            mountPath: /kvmnt
+            readOnly: true
+          - name: gitcreds
+            mountPath: /gitmnt
+            readOnly: true
+          {{- end }}
+          env:
+          - name: CCD_DEF_URLS
+            value: {{ join "," .Values.definitions | quote }}
+          - name: CCD_DEF_FILENAME
+            value: {{ .Values.definitionFilename | quote }}
+          - name: WAIT_HOSTS
+            value: {{ .Values.waitHosts | quote }}
+          - name: WAIT_HOSTS_TIMEOUT
+            value: {{ .Values.waitHostsTimeout | quote }}
+          - name: CREATE_IMPORTER_USER
+            value: "false"
+          {{- if .Values.kvSecretRef }}
+          - name: IMPORTER_CREDS_MOUNT
+            value: "/kvmnt"
+          - name: GITHUB_CREDS_MOUNT
+            value: "/gitmnt"
+          {{- else }}
+            {{- if .Values.importerFromSecret }}
+          - name: IMPORTER_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.importerUsername.secretKeyRefName | quote }}
+                key: {{ .Values.importerUsername.secretKeyRefKey | quote }}
+            {{- else }}
+          - name: IMPORTER_USERNAME
+            value: {{ .Values.importerUsername.value | quote }}
+            {{- end }} 
+            {{- if .Values.importerFromSecret }}
+          - name: IMPORTER_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.importerPassword.secretKeyRefName | quote }}
+                key: {{ .Values.importerPassword.secretKeyRefKey | quote }}
+            {{- else }}
+          - name: IMPORTER_PASSWORD
+            value: {{ .Values.importerPassword.value | quote }}
+            {{- end }} 
+          {{- end }}
+          - name: IDAM_URI
+            value: "https://idam-api.{{ tpl .Values.global.environment $ }}.platform.hmcts.net"
+          - name: REDIRECT_URI  
+            value: "https://ccd-case-management-web-{{ tpl .Values.global.environment $ }}.service.core-compute-{{ tpl .Values.global.environment $ }}.internal/oauth2redirect"
+          - name: CLIENT_ID
+            value: "ccd_gateway"
+          {{- if .Values.apiGateway.idamClientSecret.fromSecret }}
+          - name: CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.apiGateway.idamClientSecret.secretKeyRefName | quote }}
+                key: {{ .Values.apiGateway.idamClientSecret.secretKeyRefKey | quote }}
+          {{- else }}
+          - name: CLIENT_SECRET
+            value: {{ .Values.apiGateway.idamClientSecret.value | quote }}
+          {{- end }} 
+          - name: USER_ROLES
+            value: {{ join "," .Values.userRoles }}
+          - name: MICROSERVICE_BASE_URL
+            value: http://{{ .Values.ingressHost }}
+          - name: AUTH_PROVIDER_BASE_URL
+            value: "http://rpe-service-auth-provider-{{ tpl .Values.global.environment $ }}.service.core-compute-{{ tpl .Values.global.environment $ }}.internal"
+          - name: MICROSERVICE
+            value: {{ .Values.microservice }}
+          - name: CCD_STORE_BASE_URL
+            value: {{ .Values.definitionStoreUrl }}
+          - name: VERBOSE
+            value: {{ .Values.verbose | quote }}
+          resources:
+            requests:
+              memory: {{ .Values.memoryRequests }}
+              cpu: {{ .Values.cpuRequests }}
+            limits:
+              memory: {{ .Values.memoryLimits }}
+              cpu: {{ .Values.cpuLimits }}
+      restartPolicy: Never

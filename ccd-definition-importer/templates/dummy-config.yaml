@@ -1,0 +1,9 @@
+{{- if .Values.dummyConfigInCI }}  # Need this config for pipeline build, will be ignored in full CCD deployment
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    system: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    type: configuration
+{{- end}}
