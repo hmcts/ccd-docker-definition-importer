@@ -32,6 +32,6 @@ importerPassword:
 apiGateway:
     s2sKey: AAAAAAAAAAAAAAAA
     idamClientSecret: 
-      fromSecret: true
+      fromSecret: false
       secretKeyRefName: ccd-api-gateway-oauth2-client-secret
       secretKeyRefKey: key    
