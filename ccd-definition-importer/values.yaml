@@ -22,7 +22,7 @@ s2sUrl: http://rpe-service-auth-provider-{{ .Values.global.environment }}.servic
 definitionStoreUrl: http://{{ .Release.Name }}-definition-store-api
 idamApiUrl: https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net
 ingressHost: ""
-importerFromSecret: true
+importerFromSecret: false
 importerUsername: 
     secretKeyRefName: ccd-importer-username
     secretKeyRefKey: key
