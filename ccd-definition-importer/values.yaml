@@ -1,4 +1,4 @@
-image: 'hmctspublic.azurecr.io/ccd/dfinition-importer:latest'
+image: 'hmctspublic.azurecr.io/ccd/definition-importer:latest'
 memoryRequests: '512Mi'
 cpuRequests: '250m'
 memoryLimits: '2048Mi'
@@ -21,3 +21,17 @@ redirectUri: "https://ccd-case-management-web-{{ .Values.global.environment }}.s
 s2sUrl: http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
 definitionStoreUrl: http://{{ .Release.Name }}-definition-store-api
 idamApiUrl: https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net
+ingressHost: ""
+importerFromSecret: true
+importerUsername: 
+    secretKeyRefName: ccd-importer-username
+    secretKeyRefKey: key
+importerPassword: 
+    secretKeyRefName: ccd-importer-password
+    secretKeyRefKey: key
+apiGateway:
+    s2sKey: AAAAAAAAAAAAAAAA
+    idamClientSecret: 
+      fromSecret: true
+      secretKeyRefName: ccd-api-gateway-oauth2-client-secret
+      secretKeyRefKey: key    

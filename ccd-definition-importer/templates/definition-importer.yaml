@@ -6,7 +6,7 @@ metadata:
     {{- ( include "ccddi.labels" . ) | indent 4 }}
   annotations:
     helm.sh/hook: post-install,post-upgrade
-    helm.sh/hook-weight: "5"
+    helm.sh/hook-weight: "-5"
     helm.sh/hook-delete-policy: before-hook-creation  # Move to hook-succeeded after first charts are done 
 spec:
   template:
@@ -114,7 +114,7 @@ spec:
           - name: USER_ROLES
             value: {{ join "," .Values.userRoles }}
           - name: MICROSERVICE_BASE_URL
-            value: http://{{ required "A valid ingressHost is required." .Values.ingressHost }}
+            value: http://{{ .Values.ingressHost }}
           - name: AUTH_PROVIDER_BASE_URL
             value: {{ .Values.s2sUrl }}
           - name: MICROSERVICE
