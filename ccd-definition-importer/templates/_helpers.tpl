@@ -37,9 +37,3 @@ app.kubernetes.io/instance: {{ template "hmcts.ccddi.releaseName" . }}
   {{- "infra-vault-nonprod" -}}
   {{- end }}
 {{- end }}
-
-{{- define "hmcts.ccddi.overrideEnv" -}}
-{{- if .Values.global.environment -}}
-{{- tpl .Values.global.environment $ | trunc 53 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
