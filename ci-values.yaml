@@ -5,3 +5,10 @@ dummyConfigInCI: true   #Need this for pipleine build only
 definitions:
  - https://github.com/hmcts/chart-ccd/raw/master/data/CCD_Definition_Test.template.xlsx
 definitionFilename: cmc-ccd.xlsx
+userRoles:
+  - caseworker-cmc
+apiGateway:
+  s2sKey: "AAAAAAAAAAAAAAAA"
+  idamClientSecret:
+    value: "123456"
+verbose: true

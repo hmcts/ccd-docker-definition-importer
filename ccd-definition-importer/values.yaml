@@ -17,12 +17,16 @@ userRoles:
   - caseworker-bulkscan
 microservice: ccd_gw
 verbose: "false"
-#redirectUri: "https://ccd-case-management-web-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal/oauth2redirect"
-#s2sUrl: http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
-definitionStoreUrl: http://{{ .Release.Name }}-definition-store-api
-#idamApiUrl: https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net
+redirectUri: "https://ccd-case-management-web-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal/oauth2redirect"
+#redirectUri: https://www-ccd.{{ .Values.global.environment }}.platform.hmcts.net/oauth2redirect
+s2sUrl: http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
+definitionStoreUrl: http://ccd-definition-store-api-{{ .Values.global.environment }}.service.core-compute-aat.internal
+idamApiUrl: https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net
+#ccd_gateway_url: "https://gateway-ccd.{{ .Values.global.environment }}.platform.hmcts.net"
 ingressHost: ""
 importerFromSecret: false
+# kvSecretRef: kvcreds
+# gitSecretRef: kvcreds
 importerUsername: 
     secretKeyRefName: ccd-importer-username
     secretKeyRefKey: key
