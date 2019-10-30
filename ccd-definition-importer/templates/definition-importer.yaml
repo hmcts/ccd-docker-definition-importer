@@ -20,7 +20,7 @@ spec:
         {{- $globals := .Values.global }}
         {{- $vault := $globals.keyVaultPrefix -}}
         {{- range $key, $value := .Values.keyVaults }}
-        - name: vault-{{ printf "%s%s" $vault $globals.environment }}
+        - name: {{ printf "%s-%s" $vault $globals.environment }}
           flexVolume:
             driver: "azure/kv"
             secretRef:
@@ -29,7 +29,7 @@ spec:
               usepodidentity: "false"
               subscriptionid: {{ $globals.subscriptionId }}
               tenantid: {{ $globals.tenantId }}
-              keyvaultname: {{if $value.excludeEnvironmentSuffix }}{{ $vault | quote }}{{else}}{{ printf "%s%s" $vault $globals.environment }}{{ end }}
+              keyvaultname: {{if $value.excludeEnvironmentSuffix }}{{ $vault | quote }}{{else}}{{ printf "%s-%s" $vault $globals.environment }}{{ end }}
               keyvaultobjectnames: {{ $value.secrets | join ";" | quote }}  #"some-username;some-password"
               keyvaultobjecttypes: {{ trimSuffix ";" (repeat (len $value.secrets) "secret;") | quote }} # OPTIONS: secret, key, cert
         {{- end }}      
@@ -40,8 +40,8 @@ spec:
           imagePullPolicy: IfNotPresent
           {{- if .Values.global.enableKeyVaults }}
           volumeMounts:
-            - name: vault-{{ printf "%s%s" .Values.global.keyVaultPrefix .Values.global.environment }}
-              mountPath: /mnt/secrets/{{ printf "%s%s" .Values.global.keyVaultPrefix .Values.global.environment }}
+            - name: {{ printf "%s-%s" .Values.global.keyVaultPrefix .Values.global.environment }}
+              mountPath: /mnt/secrets/{{ printf "%s-%s" .Values.global.keyVaultPrefix .Values.global.environment }}
               readOnly: true
           {{- end }}
           env:
