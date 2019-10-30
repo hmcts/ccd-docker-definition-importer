@@ -1,6 +1,11 @@
+useInterpodAntiAffinity: false
+
 global:
   subscriptionId: "bf308a5c-0624-4334-8ff8-8dca9fd43783"
   tenantId: "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
+  environment: aat
+  enableKeyVaults: true
+  keyVaultPrefix: ccd
 dummyConfigInCI: true   #Need this for pipleine build only 
 definitions:
  - https://github.com/hmcts/chart-ccd/raw/master/data/CCD_Definition_Test.template.xlsx
@@ -12,3 +17,14 @@ apiGateway:
   idamClientSecret:
     value: "123456"
 verbose: true
+keyVaults:
+  "ccd":
+    excludeEnvironmentSuffix: false
+    secretRef: "kvcreds"
+    secrets:
+      - ccd-importer-username
+      - ccd-importer-password
+      - ccd-api-gateway-oauth2-client-secret
+
+
+  

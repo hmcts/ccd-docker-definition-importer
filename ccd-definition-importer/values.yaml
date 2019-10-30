@@ -24,9 +24,8 @@ definitionStoreUrl: http://ccd-definition-store-api-{{ .Values.global.environmen
 idamApiUrl: https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net
 #ccd_gateway_url: "https://gateway-ccd.{{ .Values.global.environment }}.platform.hmcts.net"
 ingressHost: ""
-importerFromSecret: false
-# kvSecretRef: kvcreds
-# gitSecretRef: kvcreds
+importerFromSecret: true
+
 importerUsername: 
     secretKeyRefName: ccd-importer-username
     secretKeyRefKey: key

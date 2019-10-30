@@ -15,47 +15,34 @@ spec:
       labels:
         {{- ( include "ccddi.labels" . ) | indent 4 }}
     spec:
-      {{- if .Values.kvSecretRef }}
+      {{- if .Values.global.enableKeyVaults }}
       volumes:
-        - name: kvcreds
+        {{- $globals := .Values.global }}
+        {{- $vault := $globals.keyVaultPrefix -}}
+        {{- range $key, $value := .Values.keyVaults }}
+        - name: vault-{{ printf "%s%s" $vault $globals.environment }}
           flexVolume:
             driver: "azure/kv"
             secretRef:
-              name: {{ default "kvcreds" .Values.kvSecretRef }} 
+              name: {{ default "kvcreds" $value.secretRef }} 
             options:
               usepodidentity: "false"
-              subscriptionid: {{ .Values.global.subscriptionId }}
-              tenantid: {{ .Values.global.tenantId }}
-              keyvaultname: {{ include "importer.definition.vault" . | quote }}
-              resourcegroup: {{ include "importer.definition.resourcegroup" . | quote }}
-              keyvaultobjectnames: "ccd-as-a-pr-importer-username;ccd-as-a-pr-importer-password"
-              keyvaultobjecttypes: "secret;secret" # OPTIONS: secret, key, cert
-        - name: gitcreds
-          flexVolume:
-            driver: "azure/kv"
-            secretRef:
-              name: {{ default "kvcreds" .Values.gitSecretRef }} 
-            options:
-              usepodidentity: "false"
-              subscriptionid: {{ .Values.global.subscriptionId }}
-              tenantid: {{ .Values.global.tenantId }}
-              keyvaultname: {{ include "importer.definition.vaultGit" . | quote }}
-              resourcegroup: "cnp-core-infra"
-              keyvaultobjectnames: "hmcts-github-apikey"
-              keyvaultobjecttypes: "secret" # OPTIONS: secret, key, cert
+              subscriptionid: {{ $globals.subscriptionId }}
+              tenantid: {{ $globals.tenantId }}
+              keyvaultname: {{if $value.excludeEnvironmentSuffix }}{{ $vault | quote }}{{else}}{{ printf "%s%s" $vault $globals.environment }}{{ end }}
+              keyvaultobjectnames: {{ $value.secrets | join ";" | quote }}  #"some-username;some-password"
+              keyvaultobjecttypes: {{ trimSuffix ";" (repeat (len $value.secrets) "secret;") | quote }} # OPTIONS: secret, key, cert
+        {{- end }}      
       {{- end }}
       containers:
         - name: {{ template "hmcts.ccddi.releaseName" . }}
           image: {{ .Values.image }} 
           imagePullPolicy: IfNotPresent
-          {{- if .Values.kvSecretRef }}
+          {{- if .Values.global.enableKeyVaults }}
           volumeMounts:
-          - name: kvcreds
-            mountPath: /kvmnt
-            readOnly: true
-          - name: gitcreds
-            mountPath: /gitmnt
-            readOnly: true
+            - name: vault-{{ printf "%s%s" .Values.global.keyVaultPrefix .Values.global.environment }}
+              mountPath: /mnt/secrets/{{ printf "%s%s" .Values.global.keyVaultPrefix .Values.global.environment }}
+              readOnly: true
           {{- end }}
           env:
           - name: CCD_DEF_URLS
@@ -68,32 +55,25 @@ spec:
             value: {{ .Values.waitHostsTimeout | quote }}
           - name: CREATE_IMPORTER_USER
             value: "false"
-          {{- if .Values.kvSecretRef }}
-          - name: IMPORTER_CREDS_MOUNT
-            value: "/kvmnt"
-          - name: GITHUB_CREDS_MOUNT
-            value: "/gitmnt"
-          {{- else }}
-            {{- if .Values.importerFromSecret }}
+          {{- if .Values.importerFromSecret }}
           - name: IMPORTER_USERNAME
             valueFrom:
               secretKeyRef:
                 name: {{ .Values.importerUsername.secretKeyRefName | quote }}
                 key: {{ .Values.importerUsername.secretKeyRefKey | quote }}
-            {{- else }}
+          {{- else }}
           - name: IMPORTER_USERNAME
             value: {{ .Values.importerUsername.value | quote }}
-            {{- end }} 
-            {{- if .Values.importerFromSecret }}
+          {{- end }} 
+          {{- if .Values.importerFromSecret }}
           - name: IMPORTER_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: {{ .Values.importerPassword.secretKeyRefName | quote }}
                 key: {{ .Values.importerPassword.secretKeyRefKey | quote }}
-            {{- else }}
+          {{- else }}
           - name: IMPORTER_PASSWORD
             value: {{ .Values.importerPassword.value | quote }}
-            {{- end }} 
           {{- end }}
           - name: IDAM_URI
             value: {{ tpl .Values.idamApiUrl $ }}
