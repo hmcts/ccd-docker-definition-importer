@@ -20,7 +20,6 @@ verbose: true
 keyVaults:
   "ccd":
     excludeEnvironmentSuffix: false
-    secretRef: "kvcreds"
     secrets:
       - ccd-importer-username
       - ccd-importer-password

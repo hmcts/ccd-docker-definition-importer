@@ -15,34 +15,37 @@ spec:
       labels:
         {{- ( include "ccddi.labels" . ) | indent 4 }}
     spec:
-      {{- if .Values.global.enableKeyVaults }}
+      {{- if and .Values.keyVaults .Values.global.enableKeyVaults }}
       volumes:
         {{- $globals := .Values.global }}
-        {{- $vault := $globals.keyVaultPrefix -}}
+        {{- $aadIdentityName := .Values.aadIdentityName }}
         {{- range $key, $value := .Values.keyVaults }}
-        - name: {{ printf "%s-%s" $vault $globals.environment }}
+        - name: vault-{{ $key }}
           flexVolume:
             driver: "azure/kv"
+            {{- if not $aadIdentityName }}
             secretRef:
-              name: {{ default "kvcreds" $value.secretRef }} 
+              name: {{ default "kvcreds" $value.secretRef }}
+            {{- end }}
             options:
-              usepodidentity: "false"
-              subscriptionid: {{ $globals.subscriptionId }}
+              usepodidentity: "{{ if $aadIdentityName }}true{{ else }}false{{ end}}"
               tenantid: {{ $globals.tenantId }}
-              keyvaultname: {{if $value.excludeEnvironmentSuffix }}{{ $vault | quote }}{{else}}{{ printf "%s-%s" $vault $globals.environment }}{{ end }}
+              keyvaultname: {{if $value.excludeEnvironmentSuffix }}{{ $key | quote }}{{else}}{{ printf "%s-%s" $key $globals.environment }}{{ end }}
               keyvaultobjectnames: {{ $value.secrets | join ";" | quote }}  #"some-username;some-password"
               keyvaultobjecttypes: {{ trimSuffix ";" (repeat (len $value.secrets) "secret;") | quote }} # OPTIONS: secret, key, cert
-        {{- end }}      
+        {{- end }}
       {{- end }}
       containers:
         - name: {{ template "hmcts.ccddi.releaseName" . }}
           image: {{ .Values.image }} 
           imagePullPolicy: IfNotPresent
-          {{- if .Values.global.enableKeyVaults }}
+          {{- if and .Values.keyVaults .Values.global.enableKeyVaults }}
           volumeMounts:
-            - name: {{ printf "%s-%s" .Values.global.keyVaultPrefix .Values.global.environment }}
-              mountPath: /mnt/secrets/{{ printf "%s-%s" .Values.global.keyVaultPrefix .Values.global.environment }}
-              readOnly: true
+            {{- range $key, $value := .Values.keyVaults }}
+              - name: vault-{{ $key }}
+                mountPath: /mnt/secrets/{{ $key }}
+                readOnly: true
+            {{- end }}
           {{- end }}
           env:
           - name: CCD_DEF_URLS
