@@ -34,8 +34,9 @@ fi
 
 if [ "_${IMPORTER_CREDS_MOUNT}" != "_" ]; then
   echo "Getting credentials from vault"
-  IMPORTER_USERNAME=$(cat ${IMPORTER_CREDS_MOUNT}/ccd-as-a-pr-importer-username)
-  IMPORTER_PASSWORD=$(cat ${IMPORTER_CREDS_MOUNT}/ccd-as-a-pr-importer-password)
+  IMPORTER_USERNAME=$(cat ${IMPORTER_CREDS_MOUNT}/ccd-importer-username)
+  IMPORTER_PASSWORD=$(cat ${IMPORTER_CREDS_MOUNT}/ccd-importer-password)
+  CLIENT_SECRET=$(cat ${IMPORTER_CREDS_MOUNT}/ccd-api-gateway-oauth2-client-secret)
 fi
 
 [ ${CREATE_IMPORTER_USER} = "true" ] && /scripts/create-importer-user.sh "${IMPORTER_USERNAME}" "${IMPORTER_PASSWORD}" "${IDAM_URI}"
