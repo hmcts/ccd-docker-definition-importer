@@ -58,14 +58,16 @@ spec:
             value: {{ .Values.waitHostsTimeout | quote }}
           - name: CREATE_IMPORTER_USER
             value: "false"
+          {{- if and .Values.keyVaults .Values.global.enableKeyVaults }}
           - name: IMPORTER_SECRETS_MOUNT
             value: '/mnt/secrets/ccd'
+          {{- end }}
           - name: IDAM_URI
             value: {{ tpl .Values.idamApiUrl $ }}
           - name: REDIRECT_URI  
             value: {{ tpl .Values.redirectUri $ }}
           - name: CLIENT_ID
-            value: 'ccd_gateway'
+            value: {{ tpl .Values.idamClientId $ }}
           - name: USER_ROLES
             value: {{ join "," .Values.userRoles }}
           - name: MICROSERVICE_BASE_URL

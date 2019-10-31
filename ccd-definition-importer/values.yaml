@@ -15,11 +15,12 @@ waitHosts: ""
 waitHostsTimeout: 300
 userRoles:
   - caseworker-cmc
-microservice: ccd_gw
-redirectUri: https://ccd-case-management-web-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal/oauth2redirect
-s2sUrl: http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
 definitionStoreUrl: http://ccd-definition-store-api-{{ .Values.global.environment }}.service.core-compute-aat.internal
+microservice: ccd_gw
+s2sUrl: http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
 idamApiUrl: https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net
+redirectUri: https://ccd-case-management-web-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal/oauth2redirect
+idamClientId: 'ccd_gateway'
 
 keyVaults:
   "ccd":
