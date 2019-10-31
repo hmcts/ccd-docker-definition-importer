@@ -4,26 +4,13 @@ global:
   subscriptionId: "1c4f0704-a29e-403d-b719-b90c34ef14c9"
   tenantId: "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
   environment: aat
-  enableKeyVaults: true
-  keyVaultPrefix: ccd
-dummyConfigInCI: true   #Need this for pipleine build only 
+dummyConfigInCI: true   #Need this for pipleine build only
 definitions:
- - https://github.com/hmcts/chart-ccd/raw/master/data/CCD_Definition_Test.template.xlsx
+ - https://github.com/hmcts/ccd-data-store-api/raw/master/src/aat/resources/CCD_CNP_27_AUTOTEST1.xlsx
 definitionFilename: cmc-ccd.xlsx
 userRoles:
   - caseworker-cmc
-apiGateway:
-  s2sKey: "AAAAAAAAAAAAAAAA"
-  idamClientSecret:
-    value: "123456"
 verbose: true
-keyVaults:
-  "ccd":
-    excludeEnvironmentSuffix: false
-    secrets:
-      - ccd-importer-username
-      - ccd-importer-password
-      - ccd-api-gateway-oauth2-client-secret
 
 
   

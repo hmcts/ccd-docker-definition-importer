@@ -32,8 +32,8 @@ else
   export CURL_OPTS="--fail --silent --show-error"
 fi
 
-if [ "_${IMPORTER_CREDS_MOUNT}" != "_" ]; then
-  echo "Getting credentials from vault"
+if [ "_${IMPORTER_SECRETS_MOUNT}" != "_" ]; then
+  echo "Getting secrets from flex mounted volumes"
   IMPORTER_USERNAME=$(cat ${IMPORTER_CREDS_MOUNT}/ccd-importer-username)
   IMPORTER_PASSWORD=$(cat ${IMPORTER_CREDS_MOUNT}/ccd-importer-password)
   CLIENT_SECRET=$(cat ${IMPORTER_CREDS_MOUNT}/ccd-api-gateway-oauth2-client-secret)

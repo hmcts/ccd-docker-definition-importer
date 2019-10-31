@@ -3,40 +3,31 @@ memoryRequests: '512Mi'
 cpuRequests: '250m'
 memoryLimits: '2048Mi'
 cpuLimits: '1500m'
-# kvSecretRef: kvcreds
-# gitSecretRef: kvcreds
+ingressHost: ""
+verbose: "false"
 # Definitions is a list. For example:
 # definitions:
-# - https://github.com/hmcts/chart-ccd/raw/master/data/CCD_Definition_Test_Exception_Record.template.xlsx
+# - https://github.com/hmcts/ccd-data-store-api/raw/master/src/aat/resources/CCD_CNP_27_AUTOTEST1.xlsx
 # - https://github.com/hmcts/chart-ccd/raw/master/data/CCD_Definition_Test.template.xlsx
 definitions: ""
 definitionFilename: ""
 waitHosts: ""
 waitHostsTimeout: 300
 userRoles:
-  - caseworker-bulkscan
+  - caseworker-cmc
 microservice: ccd_gw
-verbose: "false"
-redirectUri: "https://ccd-case-management-web-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal/oauth2redirect"
-#redirectUri: https://www-ccd.{{ .Values.global.environment }}.platform.hmcts.net/oauth2redirect
+redirectUri: https://ccd-case-management-web-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal/oauth2redirect
 s2sUrl: http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
 definitionStoreUrl: http://ccd-definition-store-api-{{ .Values.global.environment }}.service.core-compute-aat.internal
 idamApiUrl: https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net
-#ccd_gateway_url: "https://gateway-ccd.{{ .Values.global.environment }}.platform.hmcts.net"
-ingressHost: ""
-importerFromSecret: true
 
-importerUsername: 
-    secretKeyRefName: ccd-importer-username
-    secretKeyRefKey: key
-importerPassword: 
-    secretKeyRefName: ccd-importer-password
-    secretKeyRefKey: key
-apiGateway:
-    s2sKey: AAAAAAAAAAAAAAAA
-    idamClientSecret: 
-      fromSecret: false
-      secretKeyRefName: ccd-api-gateway-oauth2-client-secret
-      secretKeyRefKey: key  
+keyVaults:
+  "ccd":
+    excludeEnvironmentSuffix: false
+    secrets:
+    - ccd-importer-username
+    - ccd-importer-password
+    - ccd-api-gateway-oauth2-client-secret
 global:
-  environment: aat  
+  environment: aat
+  enableKeyVaults: true

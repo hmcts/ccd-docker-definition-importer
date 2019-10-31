@@ -37,7 +37,7 @@ spec:
       {{- end }}
       containers:
         - name: {{ template "hmcts.ccddi.releaseName" . }}
-          image: {{ .Values.image }} 
+          image: {{ .Values.image }}
           imagePullPolicy: IfNotPresent
           {{- if and .Values.keyVaults .Values.global.enableKeyVaults }}
           volumeMounts:
@@ -58,42 +58,14 @@ spec:
             value: {{ .Values.waitHostsTimeout | quote }}
           - name: CREATE_IMPORTER_USER
             value: "false"
-          {{- if .Values.importerFromSecret }}
-          - name: IMPORTER_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: {{ .Values.importerUsername.secretKeyRefName | quote }}
-                key: {{ .Values.importerUsername.secretKeyRefKey | quote }}
-          {{- else }}
-          - name: IMPORTER_USERNAME
-            value: {{ .Values.importerUsername.value | quote }}
-          {{- end }} 
-          {{- if .Values.importerFromSecret }}
-          - name: IMPORTER_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: {{ .Values.importerPassword.secretKeyRefName | quote }}
-                key: {{ .Values.importerPassword.secretKeyRefKey | quote }}
-          {{- else }}
-          - name: IMPORTER_PASSWORD
-            value: {{ .Values.importerPassword.value | quote }}
-          {{- end }}
+          - name: IMPORTER_SECRETS_MOUNT
+            value: '/mnt/secrets/ccd'
           - name: IDAM_URI
             value: {{ tpl .Values.idamApiUrl $ }}
           - name: REDIRECT_URI  
             value: {{ tpl .Values.redirectUri $ }}
           - name: CLIENT_ID
             value: 'ccd_gateway'
-          {{- if .Values.apiGateway.idamClientSecret.fromSecret }}
-          - name: CLIENT_SECRET
-            valueFrom:
-              secretKeyRef:
-                name: {{ .Values.apiGateway.idamClientSecret.secretKeyRefName | quote }}
-                key: {{ .Values.apiGateway.idamClientSecret.secretKeyRefKey | quote }}
-          {{- else }}
-          - name: CLIENT_SECRET
-            value: {{ .Values.apiGateway.idamClientSecret.value | quote }}
-          {{- end }} 
           - name: USER_ROLES
             value: {{ join "," .Values.userRoles }}
           - name: MICROSERVICE_BASE_URL
