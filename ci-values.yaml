@@ -7,7 +7,6 @@ global:
 dummyConfigInCI: true   #Need this for pipleine build only
 definitions:
  - https://github.com/hmcts/ccd-data-store-api/raw/master/src/aat/resources/CCD_CNP_27_AUTOTEST1.xlsx
-definitionFilename: cmc-ccd.xlsx
 userRoles:
   - caseworker-cmc
 verbose: true
