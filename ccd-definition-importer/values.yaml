@@ -30,5 +30,5 @@ keyVaults:
     - ccd-importer-autotest-password
     - ccd-api-gateway-oauth2-client-secret
 global:
-  environment: aat
+  environment: 
   enableKeyVaults: true
