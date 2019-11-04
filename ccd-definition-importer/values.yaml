@@ -1,0 +1,34 @@
+image: 'hmctspublic.azurecr.io/ccd/definition-importer:db1db1' # change to latest once PR merged into master
+memoryRequests: '512Mi'
+cpuRequests: '250m'
+memoryLimits: '2048Mi'
+cpuLimits: '1500m'
+ingressHost: ""
+verbose: "false"
+# Definitions is a list. For example:
+# definitions:
+# - https://github.com/hmcts/ccd-data-store-api/raw/master/src/aat/resources/CCD_CNP_27_AUTOTEST1.xlsx
+# - https://github.com/hmcts/chart-ccd/raw/master/data/CCD_Definition_Test.template.xlsx
+definitions: ""
+definitionFilename: ""
+waitHosts: ""
+waitHostsTimeout: 300
+userRoles:
+  - caseworker-cmc
+definitionStoreUrl: http://ccd-definition-store-api-{{ .Values.global.environment }}.service.core-compute-aat.internal
+microservice: ccd_gw
+s2sUrl: http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
+idamApiUrl: https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net
+redirectUri: https://ccd-case-management-web-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal/oauth2redirect
+idamClientId: 'ccd_gateway'
+
+keyVaults:
+  "ccd":
+    excludeEnvironmentSuffix: false
+    secrets:
+    - ccd-importer-autotest-email
+    - ccd-importer-autotest-password
+    - ccd-api-gateway-oauth2-client-secret
+global:
+  environment: 
+  enableKeyVaults: true
