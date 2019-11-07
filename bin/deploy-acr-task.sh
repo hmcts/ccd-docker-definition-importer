@@ -9,5 +9,5 @@ az acr task create \
     --name task-ccd-definition-importer \
     --file acr-build-task.yaml \
     --context https://github.com/hmcts/ccd-docker-definition-importer.git \
-    --branch master \
+    --branch RDM-6151 \
     --git-access-token $GITHUB_TOKEN

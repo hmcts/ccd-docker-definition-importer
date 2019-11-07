@@ -1,7 +1,8 @@
-#!/bin/sh
+#!/bin/sh 
 set -e
 
 chmod +x /scripts/*.sh
+
 
 [ "_${CCD_DEF_URLS}${CCD_DEF_FILENAME}" = "_" ] && echo "No definitions to load from CCD_DEF_URLS or CCD_DEF_FILENAME. Script terminated." && exit 0
 
@@ -44,8 +45,28 @@ fi
 echo "Getting user_token from idam"
 userToken=$(/scripts/idam-authenticate.sh ${IMPORTER_USERNAME} ${IMPORTER_PASSWORD} ${IDAM_URI} ${REDIRECT_URI} ${CLIENT_ID} ${CLIENT_SECRET})
 
-echo "Getting service_token from s2s"
-serviceToken=$(curl --fail --silent --show-error -X POST ${AUTH_PROVIDER_BASE_URL}/testing-support/lease -d "{\"microservice\":\"${MICROSERVICE}\"}" -H 'content-type: application/json')
+
+_healthy="false"
+
+if [ "$AUTH_PROVIDER_BASE_URL" != "" ]; then
+ 
+  TEST_HEALTH_URL="${AUTH_PROVIDER_BASE_URL}/health"
+  echo "==========      Getting service_token from s2s ==============================="
+  for i in {1..30}
+  do
+    sleep 10
+    wget -O - "$TEST_HEALTH_URL" >/dev/null
+    [ "$?" == "0" ] && _healthy="true" && break
+  done
+   
+  if [ "$_healthy" != "true" ]; then
+    echo "Error: application does not seem to be running, check the application logs to see why" 
+    exit 2
+  else 
+     serviceToken=$(curl --fail --silent --show-error -X POST ${AUTH_PROVIDER_BASE_URL}/testing-support/lease -d "{\"microservice\":\"${MICROSERVICE}\"}" -H 'content-type: application/json')
+  fi
+ 
+
 
 # add ccd role
 echo "Adding ccd roles"
