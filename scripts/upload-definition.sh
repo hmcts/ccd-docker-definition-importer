@@ -52,7 +52,7 @@ if [ "$AUTH_PROVIDER_BASE_URL" != "" ]; then
  
   HEALTH_URL="${AUTH_PROVIDER_BASE_URL}/health"
   echo "==========  Getting service_token from s2s  ==============================="
-  for i in {1..30}
+  for i in $(seq 0 30)
   do
     sleep 10
     echo $i
