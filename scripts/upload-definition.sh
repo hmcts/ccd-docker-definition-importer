@@ -50,12 +50,13 @@ _healthy="false"
 
 if [ "$AUTH_PROVIDER_BASE_URL" != "" ]; then
  
-  TEST_HEALTH_URL="${AUTH_PROVIDER_BASE_URL}/health"
-  echo "==========      Getting service_token from s2s ==============================="
+  HEALTH_URL="${AUTH_PROVIDER_BASE_URL}/health"
+  echo "==========  Getting service_token from s2s  ==============================="
   for i in {1..30}
   do
     sleep 10
-    wget -O - "$TEST_HEALTH_URL" >/dev/null
+    echo $i
+    wget -O - "$HEALTH_URL" >/dev/null
     [ "$?" == "0" ] && _healthy="true" && break
   done
    
