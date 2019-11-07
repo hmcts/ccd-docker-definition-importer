@@ -65,7 +65,7 @@ if [ "$AUTH_PROVIDER_BASE_URL" != "" ]; then
   else 
      serviceToken=$(curl --fail --silent --show-error -X POST ${AUTH_PROVIDER_BASE_URL}/testing-support/lease -d "{\"microservice\":\"${MICROSERVICE}\"}" -H 'content-type: application/json')
   fi
- 
+fi
 
 
 # add ccd role
