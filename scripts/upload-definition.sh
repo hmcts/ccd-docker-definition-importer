@@ -55,7 +55,6 @@ if [ "$AUTH_PROVIDER_BASE_URL" != "" ]; then
   for i in $(seq 0 30)
   do
     sleep 10
-    echo $i
     wget -O - "$HEALTH_URL" >/dev/null
     [ "$?" == "0" ] && _healthy="true" && break
   done
