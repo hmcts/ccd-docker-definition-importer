@@ -1,4 +1,4 @@
-image: 'hmctspublic.azurecr.io/ccd/definition-importer:db1gv2' # change to latest once PR merged into master
+image: 'hmctspublic.azurecr.io/ccd/definition-importer:latest'
 memoryRequests: '512Mi'
 cpuRequests: '250m'
 memoryLimits: '2048Mi'
