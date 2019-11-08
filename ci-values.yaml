@@ -7,6 +7,5 @@ definitions:
 userRoles:
   - caseworker-cmc
 verbose: true
-s2sUrl: "http://service-auth-s2s"
 
   
