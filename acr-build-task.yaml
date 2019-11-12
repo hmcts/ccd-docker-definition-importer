@@ -3,13 +3,13 @@ steps:
 
 - id: build
   build: >
-    -t {{.Run.Registry}}/ccd/definition-importer:latest -t {{.Run.Registry}}/ccd/definition-importer:{{.Run.ID}}
+    -t {{.Run.Registry}}/ccd/definition-importer:{{.Run.ID}}
     .
   keep: true
 
 - id: push
   push:
   - "{{.Run.Registry}}/ccd/definition-importer:{{.Run.ID}}"
-  - "{{.Run.Registry}}/ccd/definition-importer:latest"
+  #- "{{.Run.Registry}}/ccd/definition-importer:latest"
   when:
   - build
