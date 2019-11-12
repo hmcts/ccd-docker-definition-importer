@@ -3,6 +3,9 @@ set -e
 
 chmod +x /scripts/*.sh
 
+if [ ${VERBOSE} = "true" ]; then
+  set -x
+fi
 
 [ "_${CCD_DEF_URLS}${CCD_DEF_FILENAME}" = "_" ] && echo "No definitions to load from CCD_DEF_URLS or CCD_DEF_FILENAME. Script terminated." && exit 0
 
