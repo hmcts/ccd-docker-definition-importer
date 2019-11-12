@@ -48,6 +48,7 @@ spec:
             {{- end }}
           {{- end }}
           env:
+          {{- (include "job.secrets" .) | indent 10 }}
           - name: CCD_DEF_URLS
             value: {{ join "," .Values.definitions | quote }}
           - name: CCD_DEF_FILENAME

@@ -8,3 +8,14 @@ definitions:
 userRoles:
   - caseworker-cmc
 verbose: true
+
+secrets:
+  IMPORTER_USERNAME:
+    secretRef: ccd-importer-secret
+    key: ccd-test-import-user
+  IMPORTER_PASSWORD:
+    secretRef: ccd-importer-secret
+    key: ccd-test-import-password
+  CLIENT_SECRET:
+    secretRef: ccd-importer-secret
+    key: ccd-api-gw-client-secret
