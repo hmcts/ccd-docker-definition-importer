@@ -11,11 +11,14 @@ verbose: true
 
 secrets:
   IMPORTER_USERNAME:
-    secretRef: ccd-importer-secret
-    key: ccd-test-import-user
+    secretRef: some-secret-reference
+    key: some-key1
+    disabled: true
   IMPORTER_PASSWORD:
-    secretRef: ccd-importer-secret
-    key: ccd-test-import-password
+    secretRef: some-secret-reference
+    key: some-key2
+    disabled: true
   CLIENT_SECRET:
-    secretRef: ccd-importer-secret
-    key: ccd-api-gw-client-secret
+    secretRef: some-secret-reference
+    key: some-idam-key3
+    disabled: true
