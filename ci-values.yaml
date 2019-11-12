@@ -8,17 +8,3 @@ definitions:
 userRoles:
   - caseworker-cmc
 verbose: true
-
-secrets:
-  IMPORTER_USERNAME:
-    secretRef: importer-creds
-    key: username
-    disabled: true
-  IMPORTER_PASSWORD:
-    secretRef: importer-creds
-    key: password
-    disabled: true
-  CLIENT_SECRET:
-    secretRef: importer-creds
-    key: idam-client-secret
-    disabled: true
