@@ -11,14 +11,14 @@ verbose: true
 
 secrets:
   IMPORTER_USERNAME:
-    secretRef: some-secret-reference
-    key: some-key1
+    secretRef: importer-creds
+    key: username
     disabled: true
   IMPORTER_PASSWORD:
-    secretRef: some-secret-reference
-    key: some-key2
+    secretRef: importer-creds
+    key: password
     disabled: true
   CLIENT_SECRET:
-    secretRef: some-secret-reference
-    key: some-idam-key3
+    secretRef: importer-creds
+    key: idam-client-secret
     disabled: true
