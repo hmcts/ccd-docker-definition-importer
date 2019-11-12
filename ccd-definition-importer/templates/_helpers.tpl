@@ -25,7 +25,7 @@ Example format:
     disabled: false
 "
 */}}
-{{- define "job.secrets" -}}
+{{- define "ccddi.secrets" -}}
 
   {{- if .Values.secrets -}}
     {{- range $key, $val := .Values.secrets }}
