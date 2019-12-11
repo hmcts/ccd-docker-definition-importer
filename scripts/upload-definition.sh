@@ -40,7 +40,7 @@ if [ "_${IMPORTER_SECRETS_MOUNT}" != "_" ]; then
   echo "Getting secrets from flex mounted volumes"
   IMPORTER_USERNAME=$(cat ${IMPORTER_SECRETS_MOUNT}/ccd-importer-autotest-email)
   IMPORTER_PASSWORD=$(cat ${IMPORTER_SECRETS_MOUNT}/ccd-importer-autotest-password)
-  CLIENT_SECRET=$(cat ${IMPORTER_SECRETS_MOUNT}/ccd-api-gateway-oauth2-client-secret)
+  CLIENT_SECRET=$(cat ${IMPORTER_SECRETS_MOUNT}/ccd-admin-web-oauth2-client-secret)
 fi
 
 [ ${CREATE_IMPORTER_USER} = "true" ] && /scripts/create-importer-user.sh "${IMPORTER_USERNAME}" "${IMPORTER_PASSWORD}" "${IDAM_URI}"
