@@ -42,6 +42,6 @@ keyVaults:
     secrets:
     - ccd-importer-autotest-email
     - ccd-importer-autotest-password
-    - ccd-api-gateway-oauth2-client-secret
+    - ccd-admin-web-oauth2-client-secret
 global:
   environment:
