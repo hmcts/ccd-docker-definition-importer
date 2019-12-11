@@ -12,7 +12,7 @@ namespace=$3
 vault=ccd-$env
 username=$(az keyvault secret show --vault-name $vault --name ccd-importer-autotest-email -o tsv --query value)
 password=$(az keyvault secret show --vault-name $vault --name ccd-importer-autotest-password -o tsv --query value)
-idamClientSecret=$(az keyvault secret show --vault-name $vault --name ccd-api-gateway-oauth2-client-secret -o tsv --query value)
+idamClientSecret=$(az keyvault secret show --vault-name $vault --name ccd-admin-web-oauth2-client-secret -o tsv --query value)
 kubectl create secret generic importer-creds \
         --from-literal username=$username \
         --from-literal password=$password \
