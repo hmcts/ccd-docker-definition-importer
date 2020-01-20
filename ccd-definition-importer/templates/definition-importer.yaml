@@ -13,7 +13,7 @@ spec:
     metadata:
       name: {{ template "hmcts.ccddi.releaseName" . }}
       labels:
-        {{- ( include "ccddi.labels" . ) | indent 4 }}
+        {{- ( include "ccddi.labels" . ) | indent 8 }}
     spec:
       {{- if and .Values.keyVaults .Values.global.enableKeyVaults }}
       volumes:
