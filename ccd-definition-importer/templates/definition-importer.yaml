@@ -81,6 +81,7 @@ spec:
             value: {{ tpl .Values.definitionStoreUrl $ }}
           - name: VERBOSE
             value: {{ .Values.verbose | quote }}
+          {{- (include "ccddi.environment" .) | indent 10 }}
           resources:
             requests:
               memory: {{ .Values.memoryRequests }}

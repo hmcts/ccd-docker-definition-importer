@@ -8,3 +8,6 @@ definitions:
 userRoles:
   - caseworker-cmc
 verbose: true
+environment:
+  TEST_KEY : test-value
+  TEST_KEY2: test-value-2
