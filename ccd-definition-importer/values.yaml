@@ -34,7 +34,7 @@ secrets:
     secretRef: importer-creds
     key: idam-client-secret
     disabled: true
-
+debug: false
 keyVaults:
   "ccd":
     excludeEnvironmentSuffix: false
