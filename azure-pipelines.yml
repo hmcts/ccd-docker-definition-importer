@@ -16,16 +16,6 @@ resources:
     endpoint: 'hmcts'
 
 jobs:
-- job: Validate
-  pool:
-    vmImage: 'Ubuntu 16.04'
-  steps:
-  - template: steps/charts/validate.yaml@cnp-library
-    parameters:
-      chartName: ccd-definition-importer
-      chartReleaseName: chart-ccd-definition-importer-ci-test
-      chartNamespace: chart-tests
-      helmInstallTimeout: "600"
 
 - job: Release
   # Make sure we have a tag to run this job
