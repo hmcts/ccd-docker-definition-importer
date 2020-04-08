@@ -8,7 +8,9 @@
 {{/*
 All the common labels needed for the labels sections of the definitions.
 */}}
+{{- if .Values.aadIdentityName }}
 {{- define "ccddi.labels" }}
+{{- end -}}
 app.kubernetes.io/name: {{ template "hmcts.ccddi.releaseName" . }}
 helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
