@@ -4,7 +4,7 @@ global:
   enableKeyVaults: true
 dummyConfigInCI: true   #Need this for pipleine build only
 definitions:
- - https://github.com/hmcts/befta-fw/blob/2.6.0/src/main/resources/uk/gov/hmcts/befta/dse/ccd/definitions/valid/CCD_CNP_27_AUTOTEST1.xlsx
+ - https://github.com/hmcts/befta-fw/blob/2.6.0/src/main/resources/uk/gov/hmcts/befta/dse/ccd/definitions/valid/CCD_CNP_27_AUTOTEST1.xlsx?raw=true
 userRoles:
   - caseworker-cmc
 verbose: true
