@@ -9,44 +9,20 @@ metadata:
     helm.sh/hook-weight: "5"
     helm.sh/hook-delete-policy: "{{ if .Values.debug }}before-hook-creation{{ else }}hook-succeeded{{ end}}"
 spec:
+    {{- ( include "hmcts.secretCSIVolumes.v2" . ) | indent 4 }}
   template:
     metadata:
       name: {{ template "hmcts.ccddi.releaseName" . }}
       labels:
         {{- ( include "ccddi.labels" . ) | indent 8 }}
     spec:
-      {{- if and .Values.keyVaults .Values.global.enableKeyVaults }}
-      volumes:
-        {{- $globals := .Values.global }}
-        {{- $aadIdentityName := .Values.aadIdentityName }}
-        {{- range $key, $value := .Values.keyVaults }}
-        - name: vault-{{ $key }}
-          flexVolume:
-            driver: "azure/kv"
-            {{- if not $aadIdentityName }}
-            secretRef:
-              name: {{ default "kvcreds" $value.secretRef }}
-            {{- end }}
-            options:
-              usepodidentity: "{{ if $aadIdentityName }}true{{ else }}false{{ end}}"
-              tenantid: {{ $globals.tenantId }}
-              keyvaultname: {{if $value.excludeEnvironmentSuffix }}{{ $key | quote }}{{else}}{{ printf "%s-%s" $key $globals.environment }}{{ end }}
-              keyvaultobjectnames: {{ $value.secrets | join ";" | quote }}  #"some-username;some-password"
-              keyvaultobjecttypes: {{ trimSuffix ";" (repeat (len $value.secrets) "secret;") | quote }} # OPTIONS: secret, key, cert
-        {{- end }}
-      {{- end }}
       containers:
         - name: {{ template "hmcts.ccddi.releaseName" . }}
           image: {{ .Values.image }}
           imagePullPolicy: IfNotPresent
           {{- if and .Values.keyVaults .Values.global.enableKeyVaults }}
           volumeMounts:
-            {{- range $key, $value := .Values.keyVaults }}
-              - name: vault-{{ $key }}
-                mountPath: /mnt/secrets/{{ $key }}
-                readOnly: true
-            {{- end }}
-          {{- end }}
+          {{- ( include "hmcts.secretMounts.v2" . ) | indent 2 }}
           env:
           {{- (include "ccddi.secrets" .) | indent 10 }}
           - name: CCD_DEF_URLS
