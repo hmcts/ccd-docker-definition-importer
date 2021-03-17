@@ -34,9 +34,8 @@ spec:
           imagePullPolicy: IfNotPresent
           {{- if and .Values.keyVaults .Values.global.enableKeyVaults }}
           volumeMounts:
-            {{- range $key, $value := .Values.keyVaults }}
-              - name: vault-{{ $key }}
-                mountPath: /mnt/secrets/{{ $key }}
+              - name: vault-ccd
+                mountPath: /mnt/secrets/ccd
                 readOnly: true
             {{- end }}
           {{- end }}
