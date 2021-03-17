@@ -37,7 +37,6 @@ spec:
               - name: vault-ccd
                 mountPath: /mnt/secrets/ccd
                 readOnly: true
-            {{- end }}
           {{- end }}
           env:
           {{- (include "ccddi.secrets" .) | indent 10 }}
