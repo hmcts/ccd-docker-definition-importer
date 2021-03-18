@@ -1,9 +1,9 @@
+{{- $languageValues := (deepCopy .Values | merge (pluck .Values.language .Values | first) ) -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ template "hmcts.ccddi.releaseName" . }}
-  labels:
-    {{- ( include "ccddi.labels" . ) | indent 4 }}
+  name: {{ template "hmcts.releasename.v2" . }}
+  {{- include "hmcts.labels.v2" . | indent 2 }}
   annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-weight: "5"
@@ -11,35 +11,17 @@ metadata:
 spec:
   template:
     metadata:
-      name: {{ template "hmcts.ccddi.releaseName" . }}
-      labels:
-        {{- ( include "ccddi.labels" . ) | indent 8 }}
+      name: {{ template "hmcts.releasename.v2" . }}
+      {{- ( include "hmcts.labels.v2" . ) | indent 6 }}
     spec:
-      {{- if and .Values.keyVaults .Values.global.enableKeyVaults }}
-      volumes:
-        {{- $globals := .Values.global }}
-        {{- $aadIdentityName := .Values.aadIdentityName }}
-        {{- range $key, $value := .Values.keyVaults }}
-        - name: vault-{{ $key }}
-          csi:
-            driver: "secrets-store.csi.k8s.io"
-            readOnly: true
-            volumeAttributes:
-              secretProviderClass: vault-ccd
-        {{- end }}
-      {{- end }}
+      {{- ( include "hmcts.secretCSIVolumes.v2" . ) | indent 6 }}
       containers:
-        - name: {{ template "hmcts.ccddi.releaseName" . }}
+        - name: {{ template "hmcts.releasename.v2" . }}
           image: {{ .Values.image }}
           imagePullPolicy: IfNotPresent
-          {{- if and .Values.keyVaults .Values.global.enableKeyVaults }}
-          volumeMounts:
-              - name: vault-ccd
-                mountPath: /mnt/secrets/ccd
-                readOnly: true
-          {{- end }}
+          {{- ( include "hmcts.secretMounts.v2" . ) | indent 10 }}
           env:
-          {{- (include "ccddi.secrets" .) | indent 10 }}
+          {{- (include "hmcts.secrets.v2" .) | indent 10 }}
           - name: CCD_DEF_URLS
             value: {{ join "," .Values.definitions | quote }}
           - name: CCD_DEF_FILENAME
@@ -72,7 +54,10 @@ spec:
             value: {{ tpl .Values.definitionStoreUrl $ }}
           - name: VERBOSE
             value: {{ .Values.verbose | quote }}
-          {{- (include "ccddi.environment" .) | indent 10 }}
+          {{- range $key, $val := $languageValues.environment }}
+          - name: {{ $key }}
+            value: {{ tpl ($val | quote) $ }}
+          {{- end}}
           resources:
             requests:
               memory: {{ .Values.memoryRequests }}

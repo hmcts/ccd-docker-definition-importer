@@ -1,2 +1,4 @@
 .vscode
 .idea
+Chart.lock
+**/*.tgz
