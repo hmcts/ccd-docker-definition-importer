@@ -13,6 +13,7 @@ setup:
 	az configure --defaults acr=${ACR}
 	az acr helm repo add --name ${HELM_REPO}
 	az aks get-credentials --resource-group ${AKS_RESOURCE_GROUP} --name ${AKS_CLUSTER} --overwrite-existing
+	helm dependency update ${CHART}
 
 lint:
 	helm lint ${CHART} --namespace ${NAMESPACE} -f ci-values.yaml
@@ -21,7 +22,7 @@ inspect:
 	helm inspect chart ${CHART}
 
 deploy:
-	helm install ${CHART} --name ${RELEASE} --namespace ${NAMESPACE} -f ci-values.yaml --wait
+	helm install ${RELEASE} ${CHART}  --namespace ${NAMESPACE} -f ci-values.yaml --wait
 
 
 all: setup  lint deploy

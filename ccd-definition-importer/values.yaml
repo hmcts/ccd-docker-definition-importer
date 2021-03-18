@@ -1,3 +1,4 @@
+language: none
 image: 'hmctspublic.azurecr.io/ccd/definition-importer:latest'
 memoryRequests: '512Mi'
 cpuRequests: '250m'
