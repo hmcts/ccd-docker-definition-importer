@@ -11,4 +11,3 @@ RUN ["chmod", "+x", "/wait"]
 RUN chmod +x /scripts/*.sh
 
 CMD "/wait" && "/scripts/upload-definition.sh"
-
