@@ -8,5 +8,5 @@ maintainers:
     email: ccd-devops@HMCTS.NET
 dependencies:
   - name: library
-    version: 2.2.0
+    version: 0.5.8
     repository: https://hmctspublic.azurecr.io/helm/v1/repo/
