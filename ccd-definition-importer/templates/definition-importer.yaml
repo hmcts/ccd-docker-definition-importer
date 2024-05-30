@@ -22,7 +22,7 @@ spec:
         - name: {{ template "hmcts.releasename.v2" . }}
           image: {{ .Values.image }}
           imagePullPolicy: IfNotPresent
-          {{- ( include "hmcts.secretMounts.v2" . ) | indent 10 }}
+          {{- ( include "hmcts.secretMounts.v3" . ) | indent 10 }}
           env:
           {{- (include "hmcts.secrets.v2" .) | indent 10 }}
           - name: CCD_DEF_URLS
