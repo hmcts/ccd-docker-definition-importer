@@ -17,7 +17,8 @@ spec:
       name: {{ template "hmcts.releasename.v2" . }}
       {{- ( include "hmcts.labels.v2" . ) | indent 6 }}
     spec:
-      {{- ( include "hmcts.secretCSIVolumes.v3" . ) | indent 6 }}
+      volumes:
+        {{- ( include "hmcts.secretCSIVolumes.v3" . ) | indent 6 }}
       containers:
         - name: {{ template "hmcts.releasename.v2" . }}
           image: {{ .Values.image }}
