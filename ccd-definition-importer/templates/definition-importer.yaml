@@ -17,12 +17,14 @@ spec:
       name: {{ template "hmcts.releasename.v2" . }}
       {{- ( include "hmcts.labels.v2" . ) | indent 6 }}
     spec:
-      {{- ( include "hmcts.secretCSIVolumes.v2" . ) | indent 6 }}
+      volumes:
+        {{- ( include "hmcts.secretCSIVolumes.v3" . ) | indent 6 }}
       containers:
         - name: {{ template "hmcts.releasename.v2" . }}
           image: {{ .Values.image }}
           imagePullPolicy: IfNotPresent
-          {{- ( include "hmcts.secretMounts.v2" . ) | indent 10 }}
+          volumeMounts:
+            {{- ( include "hmcts.secretMounts.v3" . ) | indent 10 }}
           env:
           {{- (include "hmcts.secrets.v2" .) | indent 10 }}
           - name: CCD_DEF_URLS
