@@ -16,7 +16,9 @@ spec:
     metadata:
       name: {{ template "hmcts.releasename.v2" . }}
       {{- ( include "hmcts.labels.v2" . ) | indent 6 }}
+        azure.workload.identity/use: "true"
     spec:
+      serviceAccountName: {{ .Release.Namespace }}
       volumes:
         {{- ( include "hmcts.secretCSIVolumes.v3" . ) | indent 6 }}
       containers:
