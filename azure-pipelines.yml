@@ -24,7 +24,7 @@ jobs:
     parameters:
       chartName: ccd-definition-importer
       chartReleaseName: chart-ccd-definition-importer-ci-test
-      chartNamespace: chart-tests
+      chartNamespace: ccd
       helmInstallTimeout: "600"
 
 - job: Release

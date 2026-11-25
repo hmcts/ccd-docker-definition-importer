@@ -11,6 +11,12 @@ Note: the deploy script relys on a GitHub token (https://help.github.com/en/arti
 
 More info on ACR tasks can be read here: https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tasks-overview
 
+## Workload Identity
+
+The Helm chart's importer Job uses an existing Kubernetes service account with the same name as the release namespace.
+When Key Vault mounts are enabled, the service account must be annotated with `azure.workload.identity/client-id`.
+The managed identity must be federated for that service account on the target cluster and have access to the configured Key Vault secrets.
+
 ## Configuration
 
 The scripts that load the definitions expect the following environment to be available.
